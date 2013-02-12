@@ -1,0 +1,129 @@
+for link in ["esri.map", "esri.layers.FeatureLayer", "modules.RasterLayer", "esri.dijit.TimeSlider", "esri.dijit.Legend"]
+        dojo.require link
+
+arcgis_server = "http://winlidar-xen.geog.uni.edu"
+map = undefined
+countyOutline = undefined
+predictionLayer = undefined
+data2011 = undefined
+flayer = undefined
+rateLayer = undefined
+imgLayer = undefined
+timeSlider = undefined
+legend = undefined
+
+init_map = () ->
+        initExtent = new esri.geometry.Extent({"xmin":-132,"ymin":24,"xmax":-60,"ymax":50,"spatialReference":{"wkid":4326}})
+        map = new esri.Map("map", {
+                extent: esri.geometry.geographicToWebMercator(initExtent)
+        })
+        basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer")
+        layers = []
+        layers.push basemap
+        countyOutline = new esri.layers.ArcGISDynamicMapServiceLayer(arcgis_server + "/ArcGIS/rest/services/CountyOutline/MapServer")
+        layers.push countyOutline
+        predictionLayer = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/3", {
+                mode: esri.layers.FeatureLayer.MODE_ONDEMAND
+                outFields: ["Score2"]}
+        data2011 = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/0", {
+                mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
+                outFields: ["Cases_2011"]}
+        flayer = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/2", {
+                mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
+                outFields: ["NumCases2"]}
+        console.log flayer
+        layers.push flayer
+        rateLayer = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/1", {
+                mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
+                outFields: ["WNVRate"]}
+        layers.push rateLayer
+        imgLayer = undefined
+        console.log map
+        map.addLayers layers
+        timeSlider = new esri.dijit.TimeSlider({style: "width: 1000px"}, dojo.byId("timeSliderDiv")) unless timeSlider
+        dojo.connect map, 'onLoad', (theMap) ->
+                dojo.connect(dojo.byId('map'), 'resize', map, map.resize)
+        flayerUpdateHandler = dojo.connect map, 'onLayersAddResult', () ->
+                initSlider flayer
+                initLegend flayer
+                dojo.disconnect flayerUpdateHandler
+        dojo.connect dojo.byId("casesButton"), 'click', (evt) ->
+                toggleLayer()
+                rateLayer.defaultVisibility = false
+                flayer.defaultVisibility = true
+                initSlider flayer
+                initLegend flayer
+        dojo.connect dojo.byId("rateButton"), 'click', (evt) ->
+                toggleLayer()
+                flayer.defaultVisibility = false
+                rateLayer.defaultVisibility = true
+                initSlider rateLayer
+                initLegend rateLayer
+        dojo.connect dojo.byId("historical"), 'click', (evt) ->
+                toggleModel()
+        dojo.connect dojo.byId("modeling"), 'click', (evt) ->
+                toggleModel()
+        dojo.connect map, 'resize', () -> map.resize()
+                
+initSlider = (layer) ->
+        map.setTimeSlider undefined
+        map.setTimeSlider timeSlider
+        timeExtent = layer.timeInfo.timeExtent
+        console.log "Layer change"
+        console.log timeExtent
+        timeSlider.setThumbCount(1)
+        timeSlider.createTimeStopsByTimeInterval(timeExtent,1,'esriTimeUnitsMonths')
+        timeSlider.setThumbIndexes([0])
+        timeSlider.setThumbMovingRate(2500)
+        timeSlider.startup()
+
+        labels = dojo.map timeSlider.timeStops, (timeStop, i) ->
+                if i%5 == 0 then return timeStop.getMonth() + "-" + timeStop.getFullYear()
+                else return ""
+        timeSlider.setLabels(labels)
+        dojo.connect timeSlider, "onTimeExtentChange", (timeExtent) ->
+                endValString = timeExtent.endTime.toString()
+                dateArr = endValString.split(" ")
+                dojo.byId("daterange").innerHTML = "<i>#{dateArr[1]} #{dateArr[3]}</i>"
+
+initLegend = (layer) ->
+        console.log layer
+        layerInfo = {layer: layer, title: layer.name}
+        console.log "Legend info:"
+        console.log layerInfo
+        if legend
+                legend.refresh [layerInfo]
+        else
+                legend = new esri.dijit.Legend({
+                        map: map,
+                        layerInfos: [layerInfo]}, "legendDiv")
+                legend.startup()
+
+toggleLayer = () ->
+        cases = dojo.byId("casesButton")
+        rate = dojo.byId("rateButton")
+        if cases.disabled
+                cases.disabled = false
+                rate.disabled = true
+        else
+                cases.disabled = true
+                rate.disabled = false
+
+toggleModel = () ->
+        historical = dojo.byId("historical")
+        modeling = dojo.byId("modeling")
+        if historical.disabled
+                historical.disabled = false
+                modeling.disabled = true
+        else
+                historical.disabled = true
+                modeling.disabled = false
+
+dojo.addOnLoad(init_map)
+
+window.Map =
+        map: map
+        Initialize: init_map
+        InitSlider: initSlider
+        InitLegend: initLegend
+        flayer: flayer

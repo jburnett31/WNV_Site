@@ -1,0 +1,269 @@
+html
+{
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+}
+body
+{
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        background-color: #DDDDDD
+}
+#wrapper
+{
+        width: 98%;
+        height: 100%;
+        margin: 0 auto;
+}
+#header
+{
+        height: 50px;
+        width: 100%;
+        text-align: center;
+        font-size: 2em;
+        border: solid 2px black;
+}
+#content
+{
+    position: relative;
+    height: 94%;
+    width: 100%;
+}
+.shadow
+{
+        -moz-box-shadow: 3px 3px 4px #000;
+        -webkit-box-shadow: 3px 3px 4px #000;
+        box-shadow: 3px 3px 4px #000;
+}
+#map
+{
+        width: 100%;
+        height: 90%;
+}
+#timeSliderDiv
+{
+        width: 100%;
+        height: 40px;
+        margin: 0 auto;
+}
+.dijitRuleLabel
+{
+        margin-top: 5px;
+}
+#model
+{
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    left: 60px;
+}
+#layers
+{
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    right: 5px;
+}
+#scope
+{
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    right: 5px;
+}
+#legendWrapper
+{
+    position: absolute;
+    z-index: 2;
+    width: auto;
+    height: auto;
+    bottom: 30px;
+    right: 5px;
+    background-color: white;
+    opacity: 0.6;
+    filter:alpha(opacity=60);
+    -moz-opacity:0.6;
+}
+#legendDiv
+{
+    z-index: 3;
+    width: 200px;
+    height: 400px;
+    opacity: 1.0;
+    filter:alpha(opacity=100);
+    -moz-opacity:1.0;
+}
+.esriLegendService
+{
+    opacity: 1.0;
+}
+#daterange
+{
+    position: relative;
+    z-index: 2;
+    width: 300px;
+    height: 30px;
+    top: -20px;
+    left: 60px;
+    font-size: 1.8em;
+}
+.modelingWidgetContainer
+{
+    position: absolute;
+    z-index: 999;
+    width: 300px;
+    height: 100px;
+    top: 70px;
+    left: 200px;
+    background-color: white;
+}
+.modelingWidgetHeader
+{
+    width: 100%;
+    height: 20px;
+}
+.modelingWidgetLabel
+{
+    width: 100px;
+}
+.modelingWidgetCloseButton
+{
+    float: right;
+    width: 10px;
+    height: 10px;
+}
+.modelingWidgetSubmitButton
+{
+}
+.input_pane
+{
+    width: 500px;
+    height: 500px;
+    overflow: auto;
+    z-index: 3;
+    background-color: white;
+    border: 2px solid black;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+}
+.input_item
+{
+    width: 95%;
+    height: 30px;
+    border: 1px solid black;
+}
+.input_item_name
+{
+    float: left;
+    padding: 5px;
+    margin-right: 15px;
+}
+.input_item_label
+{
+    float: right;
+    padding-top: 3px;
+    margin-left: 10px;
+    margin-right: 0px;
+}
+.input_item_radio
+{
+    width: 40px;
+    float: right;
+    margin-top: 7px;
+    margin-left: 0px;
+ }
+.input_item_text
+{
+    float: right;
+    margin-left: 3px;
+    width: 30px;
+}
+.input_pane_header
+{
+    width: 100%;
+    height: 50px;
+}
+.input_pane_close
+{
+    width: 20px;
+    height: 20px;
+    z-index: 4;
+    position: relative;
+    right: -108px;
+    top: -47px;
+}
+.input_item_box
+{
+    width: 95%;
+    height: 400px;
+    overflow: auto;
+}
+.input_pane_select
+{
+    float: left;
+    width: 180px;
+}
+.input_pane_submit
+{
+    float: left;
+    margin-top: 5px;
+}
+.input_pane_container
+{
+    width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#title_header
+{
+    height: 50px;
+    width: 100%;
+}
+#uni
+{
+    height: 50px;
+    width: auto;
+    float: left;
+}
+#nga
+{
+    height: 50px;
+    width: auto;
+    float: right;
+}
+#about
+{
+    position: relative;
+    float: right;
+    margin-right: 30px;
+    top: 12px;
+}
+.about_pane
+{
+    width: 700px;
+    height: auto;
+    background-color: white;
+    background: url("../img/wood_texture.jpg");
+    border: 1px solid black;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    z-index: 100;
+}
+.about_text
+{
+    margin: 5px;
+}
+.about_close
+{
+    height: 20px;
+    width: 20px;
+    z-index: 4;
+    position: relative;
+    float: right;
+}

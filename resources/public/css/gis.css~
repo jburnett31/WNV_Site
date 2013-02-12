@@ -1,0 +1,50 @@
+html
+{
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+body
+{
+        height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background-color: #DDDDDD
+}
+#wrapper
+{
+	width: 95%;
+	height: auto;
+	margin: 0 auto;
+}
+#header
+{
+	height: 50px;
+	width: 100%;
+	text-align: center;
+	font-size: 2em;
+	border: solid 2px black;
+}
+.shadow 
+{
+	-moz-box-shadow: 3px 3px 4px #000;
+	-webkit-box-shadow: 3px 3px 4px #000;
+	box-shadow: 3px 3px 4px #000;
+}
+#map
+{
+	width: 100%;
+	height: 700px;
+}
+#timeSliderDiv
+{
+	width: 100%;
+	height: 40px;
+	margin: 0 auto;
+}
+.dijitRuleLabel
+{
+	margin-top: 5px;
+}

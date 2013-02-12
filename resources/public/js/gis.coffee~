@@ -1,0 +1,73 @@
+for link in ["esri.map", "esri.layers.FeatureLayer", "modules.RasterLayer", "esri.dijit.TimeSlider"]
+        dojo.require link
+
+arcgis_server = "http://winlidar-xen.geog.uni.edu"
+map = undefined
+countyOutline = undefined
+predictionLayer = undefined
+data2011 = undefined
+flayer = undefined
+rateLayer = undefined
+imgLayer = undefined
+
+init_map = () ->
+        initExtent = new esri.geometry.Extent({"xmin":-132,"ymin":24,"xmax":-60,"ymax":50,"spatialReference":{"wkid":4326}})
+        map = new esri.Map("map", {
+                extent: esri.geometry.geographicToWebMercator(initExtent)
+        })
+        basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer")
+        layers = []
+        layers.push basemap
+        countyOutline = new esri.layers.ArcGISDynamicMapServiceLayer(arcgis_server + "/ArcGIS/rest/services/CountyOutline/MapServer")
+        layers.push countyOutline
+        predictionLayer = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/3", {
+                mode: esri.layers.FeatureLayer.MODE_ONDEMAND
+                outFields: ["Score2"]}
+        data2011 = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/0", {
+                mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
+                outFields: ["Cases_2011"]}
+        flayer = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/2", {
+                mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
+                outFields: ["NumCases2"]}
+        console.log flayer
+        layers.push flayer
+        rateLayer = new esri.layers.FeatureLayer arcgis_server + "/ArcGIS/rest/services/WNVData1/MapServer/1", {
+                mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
+                outFields: ["WNVRate"]}
+        imgLayer = undefined
+        console.log map
+        map.addLayers layers
+        dojo.connect map, 'onLoad', (theMap) ->
+                dojo.connect(dojo.byId('map'), 'resize', map, map.resize)
+        dojo.connect(map, 'onLayersAddResult', initSlider)
+
+initSlider = (results) ->
+        console.log("addLayers event:")
+        console.log results
+        nMap = this
+        timeSlider = new esri.dijit.TimeSlider({style: "width: 1000px"}, dojo.byId("timeSliderDiv"))
+        nMap.setTimeSlider timeSlider
+        timeExtent = results[2].layer.timeInfo.timeExtent
+        console.log timeExtent
+        timeSlider.setThumbCount(1)
+        timeSlider.createTimeStopsByTimeInterval(timeExtent,1,'esriTimeUnitsMonths')
+        timeSlider.setThumbIndexes([0])
+        timeSlider.setThumbMovingRate(2500)
+        timeSlider.startup()
+
+        labels = dojo.map timeSlider.timeStops, (timeStop, i) ->
+                if i%5 == 0 then return timeStop.getMonth() + "-" + timeStop.getFullYear()
+                else return ""
+        timeSlider.setLabels(labels)
+        dojo.connect timeSlider, "onTimeExtentChange", (timeExtent) ->
+                endValString = timeExtent.endTime.toString()
+                dateArr = endValString.split(" ")
+                dojo.byId("daterange").innerHTML = "<i>#{dateArr[1]} #{dateArr[3]}</i>"
+
+dojo.addOnLoad(init_map)
+
+window.Map =
+        map: map
+        Initialize: init_map
+        InitSlider: initSlider
+        flayer: flayer
