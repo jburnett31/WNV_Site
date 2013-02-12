@@ -13,7 +13,8 @@
                  [org.geotools/gt-xml "8.6"]
                  [org.geotools/xsd/gt-xsd-kml "8.6"]
                  [org.geotools/gt-opengis "8.6"]
-                 [hiccup "1.0.2"]]
+                 [hiccup "1.0.2"]
+                 [ring-middleware-format "0.2.4"]]
   :repositories {"sonatype-oss" "http://oss.sonatype.org/content/groups/public/"
                  "osgeo-geotools" "http://download.osgeo.org/webdav/geotools"}
   :plugins [[lein-ring "0.8.2"]]

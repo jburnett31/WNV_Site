@@ -4,7 +4,8 @@
             [compojure.route :as route]
             [wnv-site.views.common :as common]
             [clojure.data.json :as json]
-            [wnv-site.calculation :refer [create-kml]]))
+            [wnv-site.calculation :refer [create-kml]]
+            [ring.middleware.format-params :refer [wrap-restful-params]]))
 
 (defroutes app-routes
   (GET "/welcome" [] (common/layout [:p "Welcome to wnv-site"]))
@@ -35,5 +36,8 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
+(quote (def app
+         (handler/site app-routes)))
+
 (def app
-  (handler/site app-routes))
+  (wrap-restful-params app-routes))

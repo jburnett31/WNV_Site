@@ -561,7 +561,7 @@
             _results = [];
             for (_l = 0, _len3 = fields.length; _l < _len3; _l++) {
               field = fields[_l];
-              _results.push(addItem(list[field], item_box));
+              _results.push(addItem(field, list[field], item_box));
             }
             return _results;
           }
@@ -572,7 +572,7 @@
       });
     }
 
-    addItem = function(name, pane) {
+    addItem = function(name, display, pane) {
       var label, label3, weight, _container;
       _container = dojo.create("div", {
         name: name,
@@ -581,7 +581,7 @@
       label = dojo.create("div", {
         name: name + "_label",
         className: 'input_item_name',
-        innerHTML: name
+        innerHTML: display
       }, _container);
       weight = dojo.create("input", {
         type: 'text',
@@ -620,10 +620,14 @@
       }
       console.log(outData);
       console.log(dojo.toJson(outData));
-      return dojo.xhrPost({
+      return dojo.rawXhrPost({
         url: "westnile/processing",
-        content: dojo.toJson(outData),
+        postData: dojo.toJson(outData),
         handleAs: 'json',
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         load: function(data) {}
       });
     };

@@ -411,19 +411,19 @@ class inputPane
                                 load: (fields) ->
                                         return if fields == null
                                         for field in fields
-                                                addItem(list[field], item_box)
+                                                addItem(field, list[field], item_box)
 
                 dojo.connect submitButton, 'onclick', () ->
                         sendValues()
 
-        addItem =  (name, pane) ->
+        addItem =  (name, display, pane) ->
                 _container = dojo.create("div",{
                         name: name,
                         className: "input_item"}, pane)
                 label = dojo.create("div",{
                         name: name + "_label",
                         className: 'input_item_name',
-                        innerHTML: name }, _container)
+                        innerHTML: display }, _container)
                 weight = dojo.create("input",{
                         type: 'text',
                         name: name + "_weight",
@@ -471,10 +471,11 @@ class inputPane
                         outData.params.push tmp
                 console.log outData
                 console.log dojo.toJson outData
-                dojo.xhrPost
+                dojo.rawXhrPost
                         url: "westnile/processing"
-                        content: dojo.toJson outData
+                        postData: dojo.toJson outData
                         handleAs: 'json'
+                        headers: {"Content-Type": "application/json", "Accept": "application/json"}
                         load: (data) ->
                                 #display image
 
