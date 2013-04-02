@@ -4,7 +4,6 @@
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [compojure "1.1.5"]
                  [org.clojure/data.json "0.2.0"]
-                 [wnv-risk-calculation "0.1.0"]
                  [incanter "1.3.0-SNAPSHOT"]
                  [org.geotools/gt-main "8.6"]
                  [org.geotools/gt-shapefile "8.6"]

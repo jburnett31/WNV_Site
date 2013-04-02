@@ -35,7 +35,8 @@
    (include-js "js/RasterLayer.js")
    (include-js "js/gis.js")
    (include-css "http://serverapi.arcgisonline.com/jsapi/arcgis/3.0/js/dojo/dijit/themes/claro/claro.css")
-   (include-css "css/gis.css")]
+   (include-css "css/gis.css")
+   (include-css "http://serverapi.arcgisonline.com/jsapi/arcgis/3.0/js/dojo/dijit/themes/soria/soria.css")]
   [:body
    [:div#wrapper.shadow
     [:div#header title]

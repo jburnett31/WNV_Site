@@ -267,3 +267,12 @@ body
     position: relative;
     float: right;
 }
+#dl
+{
+    text-align: center;
+    padding: 20px;
+    background-color: #CCCCCC;
+}
+#dl_link
+{
+}

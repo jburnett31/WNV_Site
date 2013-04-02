@@ -1,7 +1,8 @@
-for link in ["esri.map", "esri.layers.FeatureLayer", "modules.RasterLayer", "esri.dijit.TimeSlider", "esri.dijit.Legend", "dojo.dom-construct", "dijit.form.Select", "esri.layers.MapImageLayer"]
+for link in ["esri.map", "esri.layers.FeatureLayer", "modules.RasterLayer", "esri.dijit.TimeSlider", "esri.dijit.Legend", "dojo.dom-construct", "dijit.form.Select", "esri.layers.MapImageLayer", "dijit.Dialog"]
         dojo.require link
 
 arcgis_server = "http://winlidar-xen.geog.uni.edu"
+linux_server = "http://linlidar-xen.geog.uni.edu"
 map = undefined
 basemap = undefined
 #basemap2 = undefined
@@ -15,6 +16,7 @@ data2011 = undefined
 flayer = undefined
 rateLayer = undefined
 imgLayer = undefined
+kmlLayer = undefined
 timeSlider = undefined
 legend = undefined
 raster_data = undefined
@@ -314,6 +316,26 @@ modelingWidget = () ->
                         options.push {label: raster_data[i].name, value: i}
                 options
 
+downloadSHP = (name) ->
+        cont = dojo.create("div", {id: "dl"})
+        dojo.create("span", {
+                        id: "dl_label"
+                        className: "soria"
+                        innerHTML: "Your download is ready<br />"
+                }, cont)
+        dojo.create("a", {
+                        id: "dl_link"
+                        className: "soria"
+                        href: linux_server + "/kml/" + name
+                        innerHTML: "Shapefile: " + name
+                },cont)
+        dialog = new dijit.Dialog({
+                title: "Shapefile Download"
+                className: "soria"
+                content: cont
+        })
+        dialog.show()
+
 testImage = () ->
         mil = new esri.layers.MapImageLayer({
                 'id': '2012-0808-test'})
@@ -463,13 +485,10 @@ class inputPane
                 return if not state
                 outData = {}
                 outData.state = state
-                outData.params = []
+                outData.params = {}
                 for node in dojo.query('.input_item')
-                        tmp = {}
-                        tmp[node.getAttribute('name')] = node.childNodes[1].value
-#                        tmp.pos = node.childNodes[3].checked
-                        outData.params.push tmp
-                console.log outData
+                        outData.params[node.getAttribute('name')] = node.childNodes[1].value
+                        console.log outData
                 console.log dojo.toJson outData
                 dojo.rawXhrPost
                         url: "westnile/processing"
@@ -478,6 +497,7 @@ class inputPane
                         headers: {"Content-Type": "application/json", "Accept": "application/json"}
                         load: (data) ->
                                 #display image
+                                downloadSHP data
 
 dojo.addOnLoad(init_map)
 

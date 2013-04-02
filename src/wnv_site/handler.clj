@@ -4,7 +4,7 @@
             [compojure.route :as route]
             [wnv-site.views.common :as common]
             [clojure.data.json :as json]
-            [wnv-site.calculation :refer [create-kml]]
+            [wnv-site.calculation :refer :all]
             [ring.middleware.format-params :refer [wrap-restful-params]]))
 
 (defroutes app-routes
@@ -32,12 +32,14 @@
                        [:button {:id "iowa"} "Iowa"]]
                       [:div {:id "daterange"}]))
   (GET "/westnile/featclass" [] (json/write-str ["MEAN_elev" "IrrPerc" "MEDAGE2000" "MedIncome" "AveDrnCls" "All_Forest" "All_Wetlan" "prec01_06" "precPrYr" "tmaxPrYr" "tmax01_06"]))
-  (POST "/westnile/processing" [state params] (create-kml state params))
+  (POST "/westnile/processing" [state params] (do (println state params) (json/write-str (run state params))))
   (route/resources "/")
   (route/not-found "Not Found"))
 
+(quote (POST "/westnile/processing" [state params] (do (prn state params) (json/write-str "received"))))
 (quote (def app
          (handler/site app-routes)))
 
 (def app
-  (wrap-restful-params app-routes))
+  (-> app-routes
+      (wrap-restful-params)))
